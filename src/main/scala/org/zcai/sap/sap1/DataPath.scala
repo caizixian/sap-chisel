@@ -12,6 +12,7 @@ class DataPathIO(width: Int, memSizeLog: Int) extends Bundle {
   val outVal: UInt = Output(UInt(width.W))
   val data: DataToControlIO = new DataToControlIO(width, memSizeLog)
   val control: ControlToDataIO = Flipped(new ControlToDataIO(width, memSizeLog))
+  val mem: MemoryBundle = Flipped(new MemoryBundle(width, memSizeLog))
 }
 
 class DataPath(width: Int = 8, memSizeLog: Int = 4) extends Module {
@@ -19,18 +20,33 @@ class DataPath(width: Int = 8, memSizeLog: Int = 4) extends Module {
 
   val pc: UInt = RegInit(0.U(width.W))
   val out: UInt = RegInit(0.U(width.W))
-  val mem: Memory = Module(new Memory(width, memSizeLog))
+  val accum: UInt = RegInit(0.U(width.W))
+
+  val alu: ALU = Module(new ALU(width))
 
   when(io.control.pcEnable) {
     pc := pc + 1.U
   }
 
-  // FIXME
-  mem.io.write := false.B
-  mem.io.addrInst := 0.U
-  mem.io.addrData := 0.U
-  mem.io.dataIn := 0.U
-  io.data.instruction := mem.io.instOut
+  alu.io.op := io.control.aluOp
+  alu.io.x := io.mem.valueData
+  alu.io.y := accum
+
+  when(io.control.accumEnable) {
+    when(io.control.memToAccum) {
+      accum := io.mem.valueData
+    } otherwise {
+      accum := alu.io.out
+    }
+  }
+
+  when(io.control.outEnable) {
+    out := accum
+  }
+
+  io.mem.addrInst := pc
+  io.mem.addrData := io.control.addrData
+  io.data.instruction := io.mem.valueInst
 
   io.pcVal := pc
   io.outVal := out
