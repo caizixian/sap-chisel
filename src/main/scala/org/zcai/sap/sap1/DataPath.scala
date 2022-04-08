@@ -1,7 +1,6 @@
 package org.zcai.sap.sap1
 
 import chisel3._
-import chisel3.util._
 
 class DataToControlIO(width: Int, memSizeLog: Int) extends Bundle {
   val instruction: UInt = Output(UInt(width.W))
@@ -29,8 +28,8 @@ class DataPath(width: Int = 8, memSizeLog: Int = 4) extends Module {
   }
 
   alu.io.op := io.control.aluOp
-  alu.io.x := io.mem.valueData
-  alu.io.y := accum
+  alu.io.x := accum
+  alu.io.y := io.mem.valueData
 
   when(io.control.accumEnable) {
     when(io.control.memToAccum) {
@@ -50,4 +49,6 @@ class DataPath(width: Int = 8, memSizeLog: Int = 4) extends Module {
 
   io.pcVal := pc
   io.outVal := out
+
+  // printf(p"pc = ${pc}, accum = ${accum}, out = ${out}, addrData = ${io.control.addrData}, valueData = ${io.mem.valueData}\n")
 }
