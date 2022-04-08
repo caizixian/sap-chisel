@@ -22,5 +22,5 @@ class SAP1(width: Int, memSizeLog: Int, memoryFile: String = "") extends Module 
 
 object SAP1 extends App {
   new Assembler().assembleSampleProgram("build")
-  (new chisel3.stage.ChiselStage).emitVerilog(new SAP1(8, 4, "build/sap1.hex"), Array("--target-dir", "build"))
+  (new chisel3.stage.ChiselStage).emitVerilog(new SAP1(8, 4, "build/sap1.hex.txt"), Array("--target-dir", "build"))
 }
