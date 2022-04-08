@@ -5,6 +5,7 @@ import chisel3.util._
 
 class ControlToDataIO(width: Int, memSizeLog: Int) extends Bundle {
   val pcEnable: Bool = Output(Bool())
+  val dataAddr: UInt = Output(UInt(memSizeLog.W))
 }
 
 class ControlIO(width: Int, memSizeLog: Int) extends Bundle {
@@ -17,4 +18,5 @@ class ControlPath(width: Int, memSizeLog: Int) extends Module {
 
   // FIXME
   io.control.pcEnable := false.B
+  io.control.dataAddr := 0.U
 }

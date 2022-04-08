@@ -27,9 +27,10 @@ class DataPath(width: Int = 8, memSizeLog: Int = 4) extends Module {
 
   // FIXME
   mem.io.write := false.B
-  mem.io.addr := 0.U
+  mem.io.addrInst := 0.U
+  mem.io.addrData := 0.U
   mem.io.dataIn := 0.U
-  io.data.instruction := mem.io.dataOut
+  io.data.instruction := mem.io.instOut
 
   io.pcVal := pc
   io.outVal := out
