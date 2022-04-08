@@ -1,6 +1,6 @@
 package org.zcai.sap.common
 
-import java.io.{File, FileWriter}
+import java.io.{File, FileWriter, IOException}
 import scala.io.Source
 
 class Assembler {
@@ -23,28 +23,30 @@ class Assembler {
     sb ++= "VAL 255\n"
     sb ++= "VAL 255"
 
-    val buildFolder = new File(buildDir)
-    if (!buildFolder.exists()) {
-      buildFolder.mkdir()
-    }
-
-    val sourceFile = new File(buildDir + "/sap1.src")
-
     try {
-      val fw = new FileWriter(sourceFile.getAbsoluteFile)
-      fw.write(sb.toString())
-      fw.close()
-    }
-
-    val hex = new Assembler().assemble(buildDir + "/sap1.src")
-    val hexFile = new File(buildDir + "/sap1.hex.txt")
-
-    try {
-      val fw = new FileWriter(hexFile.getAbsoluteFile)
-      for (x <- hex) {
-        fw.write(Integer.toHexString(x) + "\n")
+      val buildFolder = new File(buildDir)
+      if (!buildFolder.exists()) {
+        buildFolder.mkdir()
       }
-      fw.close()
+
+      val sourceFile = new File(buildDir + "/sap1.src")
+
+      val fwSrc = new FileWriter(sourceFile.getAbsoluteFile)
+      fwSrc.write(sb.toString())
+      fwSrc.close()
+
+      val hex = new Assembler().assemble(buildDir + "/sap1.src")
+      val hexFile = new File(buildDir + "/sap1.hex.txt")
+
+      val fwHex = new FileWriter(hexFile.getAbsoluteFile)
+      for (x <- hex) {
+        fwHex.write(Integer.toHexString(x) + "\n")
+      }
+      fwHex.close()
+    } catch {
+      case e: IOException =>
+        println("IO exception while assembling the program")
+        System.exit(1)
     }
   }
 
@@ -65,7 +67,6 @@ class Assembler {
 
       instr match {
         case a: Int => program = a :: program
-        case _ =>
       }
     }
     val result = program.reverse.toArray
