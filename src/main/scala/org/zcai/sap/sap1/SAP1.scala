@@ -1,7 +1,6 @@
 package org.zcai.sap.sap1
 
 import chisel3._
-import org.zcai.sap.common.Assembler
 
 class SAP1IO(width: Int, memSizeLog: Int) extends Bundle {
   val outVal: UInt = Output(UInt(width.W))

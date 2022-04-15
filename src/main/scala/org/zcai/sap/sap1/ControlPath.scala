@@ -3,7 +3,7 @@ package org.zcai.sap.sap1
 import chisel3._
 import chisel3.experimental.ChiselEnum
 import chisel3.util._
-import org.zcai.sap.common.Instructions._
+import org.zcai.sap.sap1.Instructions._
 
 class ControlToDataIO(width: Int, memSizeLog: Int) extends Bundle {
   val pcEnable: Bool = Output(Bool())

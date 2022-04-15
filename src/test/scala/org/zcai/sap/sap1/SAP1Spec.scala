@@ -3,7 +3,6 @@ package org.zcai.sap.sap1
 import chisel3._
 import chiseltest._
 import org.scalatest.freespec.AnyFreeSpec
-import org.zcai.sap.common.Assembler
 
 class SAP1Spec extends AnyFreeSpec with ChiselScalatestTester {
 

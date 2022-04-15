@@ -1,4 +1,4 @@
-package org.zcai.sap.common
+package org.zcai.sap.sap1
 
 import java.io.{File, FileWriter, IOException}
 import scala.io.Source
